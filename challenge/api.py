@@ -1,6 +1,5 @@
 from functools import lru_cache
 from pathlib import Path
-from typing import List
 
 import fastapi
 import pandas as pd
@@ -19,7 +18,7 @@ class Flight(BaseModel):
 
 
 class PredictRequest(BaseModel):
-    flights: List[Flight]
+    flights: list[Flight]
 
 
 @lru_cache(maxsize=1)
@@ -33,7 +32,7 @@ def _load_reference_values() -> dict:
     }
 
 
-def _validate_flights(flights: List[Flight]) -> None:
+def _validate_flights(flights: list[Flight]) -> None:
     refs = _load_reference_values()
     for flight in flights:
         if flight.OPERA not in refs["opera"]:
