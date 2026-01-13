@@ -10,6 +10,7 @@ Autor: Santiago Aguirre — Senior Machine Learning Engineer
 - Ajustamos `numpy` a `1.26.4` porque `mlflow` requiere `numpy<2`, manteniendo consistencia entre `pyproject.toml` y `requirements.txt`.
 - Agregamos `ruff` en dependencias de desarrollo para formateo y linting.
 - MLflow se incluye solo en `dev` para no afectar el runtime de la API.
+- `xgboost` se movio a `dev` para reducir el tamano de la imagen de runtime.
 
 ## Parte 1 - Modelado
 
@@ -32,8 +33,27 @@ Autor: Santiago Aguirre — Senior Machine Learning Engineer
 
 ## Parte 3 - Deploy
 
-- Pendiente.
+- Eleccion del servicio: **Cloud Run** por despliegue serverless, escalado a cero y costo bajo para demo (pago por uso).
+- Registro de imagen: **Artifact Registry** para versionar la imagen Docker y mantener el flujo CI/CD estandar.
+- Region `us-central1` para disponibilidad estable y latencia razonable en pruebas.
+- Seguridad: `--allow-unauthenticated` solo para el demo; en prod se recomendaria auth y VPC.
+- Ajuste critico: `exec format error` por build ARM local; se forzo `linux/amd64` con `docker buildx`.
+- Optimización: `xgboost` movido a `dev` para reducir tamaño de imagen y tiempo de build.
+- URL del servicio: `https://latam-challenge-api-127856830294.us-central1.run.app`.
+- `STRESS_URL` actualizado en `Makefile`.
+
+## Parte 3.1 - Stress Test
+
+- Herramienta: Locust (headless), 60s, 100 usuarios, spawn rate 1.
+- Endpoint probado: `POST /predict`.
+- Resultado: 7,969 requests, 0% fallas.
+- Latencias: p95 ~380ms, p99 ~550ms, max ~1.3s.
 
 ## Parte 4 - CI/CD
 
-- Pendiente.
+- Se implemento CI/CD en `.github/workflows` a partir de los archivos base.
+- CI: instala dependencias con `uv`, corre `ruff`, `pytest tests/model` y `pytest tests/api`.
+- CD: build/push de imagen a Artifact Registry y deploy a Cloud Run en `main`.
+- Disparadores: `push`, `pull_request` y `workflow_dispatch` para ejecucion manual.
+- Secrets requeridos (GitHub Actions): `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_AR_REPO`, `GCP_SERVICE_NAME`, `GCP_SA_KEY`.
+- `GCP_SA_KEY` se genera desde un service account con roles: Cloud Run Admin, Artifact Registry Writer y Service Account User.
