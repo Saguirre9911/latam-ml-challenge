@@ -622,7 +622,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "scikit-learn" },
     { name = "uvicorn" },
-    { name = "xgboost" },
 ]
 
 [package.optional-dependencies]
@@ -631,6 +630,7 @@ dev = [
     { name = "mlflow" },
     { name = "ruff" },
     { name = "seaborn" },
+    { name = "xgboost" },
 ]
 test = [
     { name = "coverage" },
@@ -659,7 +659,7 @@ requires-dist = [
     { name = "scikit-learn", specifier = "~=1.5.0" },
     { name = "seaborn", marker = "extra == 'dev'", specifier = "~=0.13.0" },
     { name = "uvicorn", specifier = "~=0.30.0" },
-    { name = "xgboost", specifier = "~=2.1.0" },
+    { name = "xgboost", marker = "extra == 'dev'", specifier = "~=2.1.0" },
 ]
 provides-extras = ["dev", "test"]
 

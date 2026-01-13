@@ -1,7 +1,6 @@
 import os
 from contextlib import contextmanager
 from datetime import datetime
-from typing import List, Tuple, Union
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -45,7 +44,7 @@ class DelayModel:
 
     def preprocess(
         self, data: pd.DataFrame, target_column: str = None
-    ) -> Union[Tuple[pd.DataFrame, pd.DataFrame], pd.DataFrame]:
+    ) -> tuple[pd.DataFrame, pd.DataFrame] | pd.DataFrame:
         """
         Prepare raw data for training or predict.
 
@@ -131,7 +130,7 @@ class DelayModel:
                 run.log_param("class_weight_1", class_weight[1])
         return
 
-    def predict(self, features: pd.DataFrame) -> List[int]:
+    def predict(self, features: pd.DataFrame) -> list[int]:
         """
         Predict delays for new flights.
 
@@ -163,7 +162,9 @@ class DelayModel:
             return "mañana"
         if afternoon_min < date_time < afternoon_max:
             return "tarde"
-        if (evening_min < date_time < evening_max) or (night_min < date_time < night_max):
+        if (evening_min < date_time < evening_max) or (
+            night_min < date_time < night_max
+        ):
             return "noche"
         return "noche"
 
