@@ -57,3 +57,14 @@ Autor: Santiago Aguirre — Senior Machine Learning Engineer
 - Disparadores: `push`, `pull_request` y `workflow_dispatch` para ejecucion manual.
 - Secrets requeridos (GitHub Actions): `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_AR_REPO`, `GCP_SERVICE_NAME`, `GCP_SA_KEY`.
 - `GCP_SA_KEY` se genera desde un service account con roles: Cloud Run Admin, Artifact Registry Writer y Service Account User.
+
+## Hallazgos y mejoras futuras
+
+- CT de modelos: implementar un pipeline de entrenamiento continuo con datos robustos; sugerencia de stack: Airflow (orquestación), Spark (procesamiento) y un storage account como data lake.
+- Ambientes: separar infra para dev/staging/prod con credenciales distintas; en este demo no se implementó por restricciones de billing.
+- Deploy: habilitar canary deployment para minimizar riesgo en despliegues de modelo/API.
+- Monitoreo: observabilidad de latencia/errores y dashboard de SLOs; alertas en degradaciones.
+- Drift: monitoreo de data drift y model drift con thresholds y triggers de reentrenamiento.
+- Feature store: centralizar features para entrenamiento/serving y evitar skew.
+- MLflow: tracking de experimentos, métricas y artefactos del modelo; model registry para versionado y promoción.
+- Unity Catalog: gobierno de datos/modelos (catalogo, linaje, control de accesos) para asegurar compliance y trazabilidad.
