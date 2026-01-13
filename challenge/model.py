@@ -163,7 +163,9 @@ class DelayModel:
             return "mañana"
         if afternoon_min < date_time < afternoon_max:
             return "tarde"
-        if (evening_min < date_time < evening_max) or (night_min < date_time < night_max):
+        if (evening_min < date_time < evening_max) or (
+            night_min < date_time < night_max
+        ):
             return "noche"
         return "noche"
 

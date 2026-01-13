@@ -1,0 +1,36 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: ["main", "development", "feature/**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync --extra dev --extra test
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Model tests
+        run: uv run pytest tests/model
+
+      - name: API tests
+        run: uv run pytest tests/api
